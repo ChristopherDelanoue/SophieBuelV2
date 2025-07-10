@@ -257,7 +257,7 @@ function modalSuppression() {
         modal2.style.display = null;
         modal2.removeAttribute('aria-hidden');
         modal2.setAttribute('aria-modal', 'true');
-
+        btnAjoutPhoto.focus()
         // Mise à jour de la référence
         modal = modal2;
 
