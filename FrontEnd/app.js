@@ -165,7 +165,7 @@ function closeModal(event) {
     modal.querySelector('.js-modal-close').removeEventListener('click', closeModal);
     modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
     modal = null;
-    location.reload();
+    //location.reload();
 }
 
 function stopPropagation(e) {
@@ -465,6 +465,11 @@ function modalAjout() {
     photoAjoutFormulaire.onsubmit = async (event) => {
         event.preventDefault();
 
+        if (!photoSelect || !titrePhotoSelect || !categorieSelect) {
+            alert("Merci de remplir tous les champs !");
+            return; // 👈 On arrête tout ici, donc pas de reset ni de fetch
+        }
+
         const formData = new FormData();
         formData.append('image', photoSelect);
         formData.append('title', titrePhotoSelect);
@@ -485,11 +490,13 @@ function modalAjout() {
                 console.error("Réponse serveur :", errorText);
                 throw new Error(`Erreur serveur: ${response.status}`);
             }
+            const newPhoto = await response.json(); // ✅ ici ça marche, response est bien connu
+            allPhotos.push(newPhoto);
+            createGallery(allPhotos);
         } catch (error) {
             console.error("Erreur pendant l'envoi :", error);
             alert("Erreur d'envoi. Vérifie bien tous les champs.");
         }
-
         // Reset
         photoAjoutFormulaire.reset();
         photoSelect = null;

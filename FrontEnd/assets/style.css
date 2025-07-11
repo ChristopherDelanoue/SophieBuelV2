@@ -386,9 +386,17 @@ nav {
 	padding: 30px 0px 20px 0px;
 }
 
+.modalContent h2 {
+	height: 8%;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
 .photoModalContainer {
 	margin: auto;
-	height: 70%;
+	height:85%;
 	min-width: 250px;
 	max-width: 600px;
 	flex-wrap: wrap;
@@ -428,7 +436,7 @@ nav {
 	color: white;
 	font-size: 14px;
 	background-color: #707575;
-	margin : 1.5em auto ;
+	margin : 0px auto ;
 	min-width:250px;
 	max-width: 45%;
 	text-align: center;
@@ -440,10 +448,11 @@ nav {
 	cursor: pointer;
 }
 .btnDiv {
-	display: block;
+	display: flex;
+	flex-direction: column;
 	position: absolute;
 	width: 100%;
-	bottom: 0;
+	bottom: 10px;
 	left: 0;
 }
 
