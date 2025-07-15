@@ -7,6 +7,13 @@ const gallery = document.querySelector('.gallery');
 const login_Text = document.querySelector('#login-text');
 
 
+startProject()
+
+function startProject() {
+    getPhotos();
+    getCategories()
+}
+
 function getPhotos() {
     let response = fetch('http://localhost:5678/api/works')
         .then(response => response.json())
@@ -18,11 +25,8 @@ function getPhotos() {
             loginText(userId)
         });
 }
-getPhotos();
-getCategories()
 
 
-console.log(`categories :  ${categories}`)
 function createGallery(photosToDisplay) {
     gallery.innerHTML = '';
 
@@ -136,7 +140,7 @@ function showModal() {
 
 }
 
-//showModal()
+
 
 let btnModal = document.querySelector('.js-modal')
 
@@ -195,20 +199,35 @@ async function modalPhoto(container) {
                 `
         container.append(photoDiv)
         let poubelleImage = photoDiv.querySelector('.poubelle')
-        poubelleImage.addEventListener('click', (e) => {
-            let deleteImage = fetch(`http://localhost:5678/api/works/${e.target.id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Accept': '',
-                    'Authorization': `Bearer ${userToken}`
+        poubelleImage.addEventListener('click', async (e) => {
+            const photoId = parseInt(e.target.id);
+
+            try {
+                const res = await fetch(`http://localhost:5678/api/works/${photoId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`
+                    }
+                });
+
+                if (res.ok) {
+                    // 1. Supprimer l'élément de la modale
+                    photoDiv.remove();
+
+                    // 2. Supprimer la photo dans allPhotos
+                    allPhotos = allPhotos.filter(photo => photo.id !== photoId);
+
+                    // 3. Mettre à jour la galerie principale en arrière-plan
+                    createGallery(allPhotos);
+                } else {
+                    console.warn("Suppression échouée :", await res.text());
+                    alert("Erreur lors de la suppression.");
                 }
-            })
-            if (photoDiv && photoDiv.nodeType === Node.ELEMENT_NODE) {
-                photoDiv.remove();
-            } else {
-                console.warn("suppression impossible");
+            } catch (err) {
+                console.error("Erreur réseau :", err);
+                alert("Erreur réseau pendant la suppression.");
             }
-        })
+        });
     })
 }
 
@@ -490,8 +509,7 @@ function modalAjout() {
                 console.error("Réponse serveur :", errorText);
                 throw new Error(`Erreur serveur: ${response.status}`);
             }
-            const newPhoto = await response.json(); // ✅ ici ça marche, response est bien connu
-            allPhotos.push(newPhoto);
+            getPhotos();
             createGallery(allPhotos);
         } catch (error) {
             console.error("Erreur pendant l'envoi :", error);
