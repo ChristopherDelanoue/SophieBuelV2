@@ -508,9 +508,12 @@ function modalAjout() {
                 const errorText = await response.text();
                 console.error("Réponse serveur :", errorText);
                 throw new Error(`Erreur serveur: ${response.status}`);
+            } else {
+                allPhotos = []
+                getPhotos()
+                razGallerieContainer()
             }
-            getPhotos();
-            createGallery(allPhotos);
+
         } catch (error) {
             console.error("Erreur pendant l'envoi :", error);
             alert("Erreur d'envoi. Vérifie bien tous les champs.");

@@ -403,6 +403,7 @@ nav {
 	overflow: auto;
 	display: grid;
 	grid-template-columns: repeat(5,calc(100% / 5 - 15px));
+	grid-template-rows: repeat(auto-fill, 175px);
 	gap: 30px 15px;
 }
 
