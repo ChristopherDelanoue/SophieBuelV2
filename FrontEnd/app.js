@@ -78,21 +78,20 @@ function addCategoryEventListeners() {
             const selectedCategoryText = e.target.textContent; // Récupère le texte du bouton cliqué
             console.log("Catégorie sélectionnée :", selectedCategoryText);
 
-            // Gère la classe 'active' pour le style des boutons
+            // Gère la classe 'active'
             filterButtons.forEach(btn => btn.classList.remove('active'));
             e.target.classList.add('active');
 
-            let photosToDisplay = []; // Tableau qui contiendra les photos à afficher
+            let photosToDisplay = [];
 
             if (selectedCategoryText === 'Tous') {
-                photosToDisplay = allPhotos; // Si "Tous", on affiche toutes les photos originales
+                photosToDisplay = allPhotos; //
             } else {
-                // Sinon, on filtre 'allPhotos' pour obtenir les photos de la catégorie sélectionnée
                 photosToDisplay = allPhotos.filter(photo => {
                     return photo.category && photo.category.name === selectedCategoryText;
                 });
             }
-            createGallery(photosToDisplay); // Met à jour la galerie avec les photos filtrées
+            createGallery(photosToDisplay);
         });
     });
 }
@@ -108,7 +107,6 @@ function loginText(userid) {
     if (userid && userToken) {
         loginLink.innerText = "Logout"
         loginLink.setAttribute('href', 'index.html');
-        //loginClass.forEach(btn => btn.classList.remove('login-class'));
     } else {
         loginClass.forEach((btn) => {
             btn.style.display = 'none';
@@ -124,7 +122,6 @@ loginBtn.addEventListener('click', (e)=> {
             localStorage.removeItem('userId');
         } else {
             window.location.href = 'login.html';
-
         }
     }
 });
@@ -137,7 +134,6 @@ let modal = null
 function showModal() {
     modalSuppression();
     modalAjout()
-
 }
 
 
@@ -211,13 +207,8 @@ async function modalPhoto(container) {
                 });
 
                 if (res.ok) {
-                    // 1. Supprimer l'élément de la modale
                     photoDiv.remove();
-
-                    // 2. Supprimer la photo dans allPhotos
                     allPhotos = allPhotos.filter(photo => photo.id !== photoId);
-
-                    // 3. Mettre à jour la galerie principale en arrière-plan
                     createGallery(allPhotos);
                 } else {
                     console.warn("Suppression échouée :", await res.text());
@@ -298,7 +289,6 @@ function modalSuppression() {
 
 
 function modalAjout() {
-    // 👇 Ces variables doivent être tout en haut pour être visibles partout
     let titrePhotoSelect = '';
     let categorieSelect = '';
     let photoSelect = null;
@@ -467,7 +457,6 @@ function modalAjout() {
     aside.appendChild(modalWrapper);
     document.body.appendChild(aside);
 
-    // ✅ vérification des 3 champs
     function verificationChampRempli() {
         if (
             titrePhotoSelect.trim() !== '' &&
@@ -486,7 +475,7 @@ function modalAjout() {
 
         if (!photoSelect || !titrePhotoSelect || !categorieSelect) {
             alert("Merci de remplir tous les champs !");
-            return; // 👈 On arrête tout ici, donc pas de reset ni de fetch
+            return; 
         }
 
         const formData = new FormData();
