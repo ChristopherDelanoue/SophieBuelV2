@@ -3,20 +3,25 @@ let password = ''
 let userId = ''
 let userToken = ''
 
+let LogInForm = document.querySelector('#logInForm');
+
+let loginError = document.createElement('p');
+loginError.classList.add('loginError');
+loginError.innerText = "Erreur de connexion. Merci de vérifier vos identifiants.";
+
+
+LogInForm.appendChild(loginError);
+
 let emailInput = document.querySelector('#email');
 let passwordInput = document.querySelector('#password');
 
 emailInput.addEventListener('input', e => {
     email = e.target.value;
-    console.log(email);
 })
 
 passwordInput.addEventListener('input', e => {
     password = e.target.value;
-    console.log(password);
 })
-
-let LogInForm = document.querySelector('#logInForm');
 
 LogInForm.onsubmit = async (event) => {
     event.preventDefault();
@@ -36,10 +41,15 @@ LogInForm.onsubmit = async (event) => {
     if (userId && userToken) {
         localStorage.setItem('userToken', userToken);
         localStorage.setItem('userId', userId);
-        console.log(`l'utilisateur : ${userId} avec le toker : ${userToken}`);
         window.location.href = 'index.html'
     } else {
-        alert(`Erreur de connecxion merci de vous identifier`)
+        loginError.style.display = 'flex';
+        loginError.style.position = 'absolute';
+        setTimeout(() => {
+            loginError.style.display = 'none';
+        }, 5000);
+
+
     }
 }
 

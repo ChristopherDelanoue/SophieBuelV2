@@ -586,3 +586,15 @@ nav {
 	object-fit: contain;
 	top: 0;
 }
+
+.loginError {
+	display: none;
+	color: var(--vertPerso);
+	background-color: rgba(47, 92, 80, 0.56);
+	padding : 20px;
+	border : 1px solid var(--vertPerso);
+	border-radius : 15px;
+	marginTop: 15px;
+	textAlign: center;
+	fontWeight : bold;
+}

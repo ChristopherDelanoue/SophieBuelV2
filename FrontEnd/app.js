@@ -59,6 +59,7 @@ function getCategories() {
                 let categoryButton = document.createElement('p');
                 categoryButton.innerText = `${cat.name}`
                 categoryButton.setAttribute('class', 'filter-button');
+                categoryButton.dataset.id = cat.id;
                 filterContainer.appendChild(categoryButton);
                 if (cat.name === 'Tous') {
                     categoryButton.classList.add('active');
@@ -69,28 +70,26 @@ function getCategories() {
         })
 }
 
-// Fonction pour ajouter les écouteurs d'événements aux boutons de catégorie
 function addCategoryEventListeners() {
-    let filterButtons = document.querySelectorAll('.filter-button'); // Sélectionne tous les boutons de filtre
+    let filterButtons = document.querySelectorAll('.filter-button');
 
     filterButtons.forEach(button => {
         button.addEventListener('click', (e) => {
-            const selectedCategoryText = e.target.textContent; // Récupère le texte du bouton cliqué
-            console.log("Catégorie sélectionnée :", selectedCategoryText);
+            const selectedCategoryId = e.target.dataset.id;
 
-            // Gère la classe 'active'
             filterButtons.forEach(btn => btn.classList.remove('active'));
             e.target.classList.add('active');
 
-            let photosToDisplay = [];
+            let photosToDisplay;
 
-            if (selectedCategoryText === 'Tous') {
-                photosToDisplay = allPhotos; //
+            if (selectedCategoryId == 0) {
+                photosToDisplay = allPhotos;
             } else {
                 photosToDisplay = allPhotos.filter(photo => {
-                    return photo.category && photo.category.name === selectedCategoryText;
+                    return photo.categoryId === Number(selectedCategoryId);
                 });
             }
+
             createGallery(photosToDisplay);
         });
     });
@@ -165,7 +164,6 @@ function closeModal(event) {
     modal.querySelector('.js-modal-close').removeEventListener('click', closeModal);
     modal.querySelector('.js-modal-stop').removeEventListener('click', stopPropagation)
     modal = null;
-    //location.reload();
 }
 
 function stopPropagation(e) {
@@ -345,8 +343,11 @@ function modalAjout() {
     let divAjoutPhoto = document.createElement('div');
     divAjoutPhoto.classList.add('divAjoutPhoto');
 
+    //ajout photo
+
     let inputAjoutPhoto = document.createElement('input');
     inputAjoutPhoto.setAttribute('type', 'file');
+    inputAjoutPhoto.style.cursor = 'pointer';
     inputAjoutPhoto.setAttribute('id', 'inputAjoutPhoto');
 
     let imgAffichagePreview = document.createElement('img');
@@ -362,6 +363,7 @@ function modalAjout() {
 
     let divCustomButton = document.createElement('div');
     divCustomButton.classList.add('divCustomButton');
+    divCustomButton.style.gap = '10px';
 
     let iconePicture = document.createElement('i');
     iconePicture.classList.add("fa-solid", 'fa-image');
@@ -389,7 +391,7 @@ function modalAjout() {
             const validTypes = ['image/jpeg', 'image/png'];
             if (!validTypes.includes(file.type)) {
                 alert("Format invalide. Seules les images JPG et PNG sont acceptées.");
-                input.value = ''; // on vide l’input
+                input.value = ''; // vide l’input
                 return;
             }
             const maxSize = 4 * 1024 * 1024;
